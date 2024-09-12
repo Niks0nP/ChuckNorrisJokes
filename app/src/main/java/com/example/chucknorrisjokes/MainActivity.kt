@@ -11,42 +11,38 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.chucknorrisjokes.data.network.HttpConnect
+import com.example.chucknorrisjokes.data.network.HttpConnector
 import com.example.chucknorrisjokes.ui.theme.ChuckNorrisJokesTheme
-import kotlinx.coroutines.runBlocking
+import com.example.chucknorrisjokes.viewmodel.JokeViewModel
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
+
+    private val composableScreen = ComposableScreen()
+    lateinit var jokeViewModel: JokeViewModel
+
     override fun onCreate(savedInstanceState: Bundle?) {
+
+        jokeViewModel = JokeViewModel()
+
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
             ChuckNorrisJokesTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
+                    composableScreen.ScreenJoke(
                         modifier = Modifier.padding(innerPadding)
                     )
                 }
             }
         }
-
+        jokeViewModel.getJoke()
+//            GlobalScope.launch {
+//                HttpConnector().getResponse()
+//            }
 //            HttpConnect().getResponse()
 
     }
 }
 
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    ChuckNorrisJokesTheme {
-        Greeting("Android")
-    }
-}

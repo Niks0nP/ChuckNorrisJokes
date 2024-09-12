@@ -1,12 +1,14 @@
 package com.example.chucknorrisjokes.data.network
 
 import android.util.Log
+import com.example.chucknorrisjokes.data.model.JokeEntity
+import org.json.JSONObject
 import java.net.HttpURLConnection
 import java.net.URL
 
-class HttpConnect {
+class HttpConnector {
 
-    suspend fun getResponse(): String? {
+    suspend fun getResponse(): JokeEntity? {
         val httpUrlConnector = createUrlConnector(Common.BASE_URL)
 
         try {
@@ -15,11 +17,14 @@ class HttpConnect {
                 val response = httpUrlConnector.inputStream.bufferedReader()
                     .use { it.readText() }
                 println(response)
-                return response
+                val parseResponse = ParserJson().parseJson(JSONObject(response))
+                println(parseResponse)
+                return parseResponse
             }
         } catch (e: Exception) {
             Log.d("TAG", "Error during data transfer: $e")
         }
+
         return null
     }
 
