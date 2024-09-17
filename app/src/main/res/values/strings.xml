@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">ChuckNorrisJokes</string>
+    <string name="add_joke">Add joke</string>
+    <string name="title">Chuck Norris fact</string>
+    <string name="image_cont_desc">Image with Chuck Norris</string>
+    <string name="category_joke">Category joke: </string>
+    <string name="joke_text_not_found">No found joke</string>
 </resources>

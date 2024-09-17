@@ -25,6 +25,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -77,7 +78,7 @@ class ComposableScreen {
                         end.linkTo(parent.end)
                     }
                     .padding(start = 16.dp, end = 16.dp, bottom = 16.dp)) {
-                Text("Add joke")
+                Text(stringResource(R.string.add_joke))
             }
         }
     }
@@ -90,7 +91,8 @@ class ComposableScreen {
                 .padding(top = 80.dp, bottom = 20.dp),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally) {
-            Text("Chuck Norris fact",
+            Text(
+                stringResource(R.string.title),
                 fontWeight = FontWeight.Bold,
                 fontSize = 24.sp)
         }
@@ -108,21 +110,23 @@ class ComposableScreen {
         ) {
             Image(
                 painter = rememberImagePainter("https://api.chucknorris.io/img/avatar/chuck-norris.png"),
-                contentDescription = "Todo",
+                contentDescription = stringResource(R.string.image_cont_desc),
                 Modifier
                     .padding(start = 16.dp, top = 10.dp)
                     .size(50.dp)
             )
             Column {
                 Text(
-                    if (joke?.categories?.equals("[]") == true) "Category joke: random"
-                    else "Category joke: ${joke?.categories}",
+                    if (joke?.categories?.equals("[]") == true)
+                        stringResource(R.string.category_joke) + "random"
+                    else
+                        stringResource(R.string.category_joke) + "${joke?.categories}",
                     Modifier.padding(start = 16.dp, bottom = 10.dp, top = 10.dp),
                     fontWeight = FontWeight.Medium,
                     fontSize = 16.sp
                 )
                 Text(
-                    joke?.value ?: "No found joke",
+                    joke?.value ?: stringResource(R.string.joke_text_not_found),
                     Modifier.padding(start = 16.dp, end = 16.dp, bottom = 10.dp)
 
                 )
