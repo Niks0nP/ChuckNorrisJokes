@@ -16,7 +16,7 @@ class HttpConnector {
             if (responseCode == HttpURLConnection.HTTP_OK) {
                 val response = httpUrlConnector.inputStream.bufferedReader()
                     .use { it.readText() }
-
+                    println(response)
                 val parseResponse = ParserJson().parseJson(JSONObject(response))
                 return parseResponse
             }

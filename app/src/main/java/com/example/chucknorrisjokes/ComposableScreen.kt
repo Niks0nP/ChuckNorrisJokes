@@ -2,6 +2,7 @@ package com.example.chucknorrisjokes
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -11,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -21,6 +23,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -28,6 +31,7 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import coil.compose.rememberImagePainter
 import com.example.chucknorrisjokes.data.model.JokeEntity
+import com.example.chucknorrisjokes.ui.theme.LightBlue
 import com.example.chucknorrisjokes.viewmodel.JokeViewModel
 import kotlinx.coroutines.launch
 
@@ -43,10 +47,12 @@ class ComposableScreen {
         val coroutineScope = rememberCoroutineScope()
 
         ConstraintLayout {
-            Column(modifier
-                .fillMaxSize()
-                .padding(bottom = 80.dp)) {
-                TopTitle(modifier)
+            Column(
+                Modifier
+                    .fillMaxSize()
+                    .padding(bottom = 80.dp)
+            ) {
+                TopTitle()
 
                 LaunchedEffect(jokeStateFlow) {
                     list = viewModel.getJokeList()
@@ -57,13 +63,13 @@ class ComposableScreen {
 
                 LazyColumn(state = listState) {
                     items(list.size) {
-                        ItemJoke(modifier, list[it])
+                        ItemJoke(list[it])
                     }
                 }
             }
             Button(
                 onClick = onJokeClicked,
-                modifier
+                Modifier
                     .fillMaxWidth()
                     .constrainAs(createRef()) {
                         bottom.linkTo(parent.bottom)
@@ -77,38 +83,48 @@ class ComposableScreen {
     }
 
     @Composable
-    fun TopTitle(modifier: Modifier) {
-        Column(modifier.fillMaxWidth(),
+    fun TopTitle() {
+        Column(
+            Modifier
+                .fillMaxWidth()
+                .padding(top = 80.dp, bottom = 20.dp),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally) {
             Text("Chuck Norris fact",
-
                 fontWeight = FontWeight.Bold,
                 fontSize = 24.sp)
         }
     }
 
     @Composable
-    fun ItemJoke(modifier: Modifier, jokeStateFlow: JokeEntity?) {
-        Row(modifier.background(Color.LightGray)) {
+    fun ItemJoke(joke: JokeEntity?) {
+        Row(Modifier
+            .fillMaxWidth()
+            .padding(start = 16.dp, end = 16.dp, top = 4.dp, bottom = 4.dp)
+            .border(2.dp, Color.LightGray, RoundedCornerShape(8.dp))
+            .clip(RoundedCornerShape(8.dp))
+            .background(LightBlue)
+
+        ) {
             Image(
                 painter = rememberImagePainter("https://api.chucknorris.io/img/avatar/chuck-norris.png"),
                 contentDescription = "Todo",
-                modifier
-                    .padding(start = 16.dp)
+                Modifier
+                    .padding(start = 16.dp, top = 10.dp)
                     .size(50.dp)
             )
             Column {
                 Text(
-                    if (jokeStateFlow?.categories != null) "Category joke: ${jokeStateFlow.categories}"
-                    else "Category: random",
-                    modifier.padding(start = 16.dp),
+                    if (joke?.categories?.equals("[]") == true) "Category joke: random"
+                    else "Category joke: ${joke?.categories}",
+                    Modifier.padding(start = 16.dp, bottom = 10.dp, top = 10.dp),
                     fontWeight = FontWeight.Medium,
                     fontSize = 16.sp
                 )
                 Text(
-                    jokeStateFlow?.value ?: "No found joke",
-                    modifier.padding(start = 16.dp, end = 16.dp)
+                    joke?.value ?: "No found joke",
+                    Modifier.padding(start = 16.dp, end = 16.dp, bottom = 10.dp)
+
                 )
             }
         }
